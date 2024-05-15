@@ -1,11 +1,11 @@
 import torch
-from torch import nn,ptim 
+from torch import optim 
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from dataset import ImageObjDataset  
-from model import InfoGANGeneratorWithMixedCodes, OptimizedInfoGANDiscriminator
+from dataset.dataset import ImageObjDataset  
+from model.model_mesh import InfoGANGeneratorWithMixedCodes, OptimizedInfoGANDiscriminator
 from torch.utils.tensorboard import SummaryWriter
-from postprocessing import process_generated_data
+# from training.postprocessing import process_generated_data
 
 
 # 设备设置
@@ -30,14 +30,17 @@ def info_loss(categorical_pred, continuous_pred, categorical_true, continuous_tr
 
 # 参数设置
 noise_dim = 100
-num_categories = 10
+num_categories = 4
 cont_dim = 5
 learning_rate = 0.0002
 batch_size = 32
 epochs = 100
+img_channels = 3     # 图像通道数
+img_size = 256       # 图像尺寸
+point_cloud_dim = 26317*3  # 点云的输出维度
 
 # 模型初始化
-generator = InfoGANGeneratorWithMixedCodes(noise_dim, num_categories, cont_dim)
+generator = InfoGANGeneratorWithMixedCodes(noise_dim, num_categories, cont_dim,img_channels,img_size, point_cloud_dim)
 discriminator = OptimizedInfoGANDiscriminator(num_categories, cont_dim)
 
 # 优化器
@@ -50,12 +53,12 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
-dataset = ImageObjDataset(root_dir='C:\Users\s1810\3DINFOGAN_MASTER4\dataset', transform=transform)
+dataset = ImageObjDataset(root_dir='C:\\Users\\s1810\\3DINFOGAN_MASTER4\\dataset', transform=transform)
 data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
 
 # 初始化数据集
-dataset = ImageObjDataset(root_dir='C:\Users\s1810\3DINFOGAN_MASTER4\dataset', transform=transform)
+dataset = ImageObjDataset(root_dir='C:\\Users\\s1810\\3DINFOGAN_MASTER4\\dataset', transform=transform)
 data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
  # 训练循环
@@ -106,8 +109,8 @@ processed_mesh = process_generated_data(generator, device, noise_dim, num_catego
 processed_mesh.show()
 
 # 保存模型
-torch.save(generator.state_dict(), 'C:\Users\s1810\3DINFOGAN_MASTER4\output\generator')
-torch.save(discriminator.state_dict(), 'C:\Users\s1810\3DINFOGAN_MASTER4\output\discrminator')
+torch.save(generator.state_dict(), 'C:\\Users\\s1810\\3DINFOGAN_MASTER4\\output\\generator')
+torch.save(discriminator.state_dict(), 'C:\\Users\\s1810\\3DINFOGAN_MASTER4\\output\\discrminator')
 
 # 关闭TensorBoard写入器
 writer.close()

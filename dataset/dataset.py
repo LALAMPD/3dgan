@@ -33,7 +33,7 @@ class ImageObjDataset(Dataset):
         obj = np.load(obj_name)
 
         # 转换为Tensor
-        obj = torch.from_numpy(obj).float().view(-1, 1)  # 确保形状为 [26317, 1]
+        obj = torch.from_numpy(obj).float().view(-1, 3)  # 确保形状为 [26317, 3]
 
         return image, obj
 
@@ -43,4 +43,5 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
-dataset = ImageObjDataset(root_dir='/path/to/your/dataset', transform=transform)
+
+dataset = ImageObjDataset(root_dir='C:\\Users\\s1810\\3DINFOGAN_MASTER4\\dataset', transform=transform)

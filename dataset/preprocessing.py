@@ -15,7 +15,7 @@ def load_image(image_path):
     # 这里可以添加其他的图像处理步骤
     return image
 # 使用示例
-image = load_image('C:\Users\s1810\3DINFOGAN_MASTER4\dataset\images')
+image = load_image("c:\\Users\\s1810\\3DINFOGAN_MASTER4\\dataset\\images")
 image.show()
 
 
@@ -26,7 +26,7 @@ def load_3d_model(model_path):
     return mesh
 
 # 使用示例
-mesh = load_3d_model('C:\Users\s1810\3DINFOGAN_MASTER4\dataset\objs')
+mesh = load_3d_model('C:\\Users\\s1810\\3DINFOGAN_MASTER4\\dataset\\objs')
 print(mesh)
 
 def render_model_from_viewpoint(mesh_path, camera_position, camera_target, camera_up, fov=60, img_width=640, img_height=480):

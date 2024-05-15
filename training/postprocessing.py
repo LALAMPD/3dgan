@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import trimesh
-from model import InfoGANGeneratorWithMixedCodes  # 确保引入正确的生成器类
+from model.model_mesh import InfoGANGeneratorWithMixedCodes  # 确保引入正确的生成器类
 
 def tensor_to_mesh(point_cloud_tensor):
     """
@@ -35,7 +35,7 @@ def generate_and_process(model_path, device, noise_dim, num_categories, cont_dim
     生成点云,转换为Mesh,应用后处理,并显示结果。
     """
     # 加载模型
-    generator = InfoGANGeneratorWithMixedCodes(noise_dim, num_categories, cont_dim)
+    generator = InfoGANGeneratorWithMixedCodes(noise_dim, num_categories, cont_dim,img_channels, img_size, point_cloud_dim)
     generator.load_state_dict(torch.load(model_path))
     generator.to(device)
     generator.eval()
@@ -56,11 +56,14 @@ def generate_and_process(model_path, device, noise_dim, num_categories, cont_dim
     mesh.show()
 
 # 设置参数
-model_path = 'path_to_generator_model.pth'
+model_path = 'C:\\Users\\s1810\\3DINFOGAN_MASTER4\\output'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 noise_dim = 100
-num_categories = 10
+num_categories = 4
 cont_dim = 5
+img_channels = 3     # 图像通道数
+img_size = 256       # 图像尺寸
+point_cloud_dim = 26317*3  # 点云的输出维度
 
 # 运行处理流程
 generate_and_process(model_path, device, noise_dim, num_categories, cont_dim)
